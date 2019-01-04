@@ -13,24 +13,28 @@ import com.google.firebase.samples.apps.mlkit.common.GraphicOverlay.Graphic
 class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace: FirebaseVisionFace?)
     : Graphic(overlay) {
 
-    private val facePositionPaint: Paint
-    private val idPaint: Paint
-    private val boxPaint: Paint
+    private val facePositionPaint: Paint = Paint()
+    private val idPaint: Paint = Paint()
+    private val boxPaint: Paint = Paint()
+    private val contourPaint: Paint = Paint()
+    private val leftEyePaint: Paint = Paint()
+    private val rightEyePaint: Paint = Paint()
+    private val nosePaint: Paint = Paint()
 
     init {
-        val selectedColor = Color.WHITE
+        facePositionPaint.color = Color.WHITE
+        contourPaint.color = Color.BLUE
+        leftEyePaint.color = Color.CYAN
+        rightEyePaint.color = Color.YELLOW
+        nosePaint.color = Color.RED
 
-        facePositionPaint = Paint()
-        facePositionPaint.color = selectedColor
-
-        idPaint = Paint()
-        idPaint.color = selectedColor
+        idPaint.color = Color.GREEN
         idPaint.textSize = ID_TEXT_SIZE
 
-        boxPaint = Paint()
-        boxPaint.color = selectedColor
+        boxPaint.color = Color.RED
         boxPaint.style = Paint.Style.STROKE
         boxPaint.strokeWidth = BOX_STROKE_WIDTH
+
     }
 
     /** Draws the face annotations for position on the supplied canvas.  */
@@ -56,12 +60,12 @@ class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace
         for (point in contour.points) {
             val px = translateX(point.x)
             val py = translateY(point.y)
-            canvas.drawCircle(px, py, FACE_POSITION_RADIUS, facePositionPaint)
+            canvas.drawCircle(px, py, FACE_POSITION_RADIUS, contourPaint)
         }
 
         if (face.smilingProbability >= 0) {
             canvas.drawText(
-                    "happiness: ${String.format("%.2f", face.smilingProbability)}",
+                    "Smile Index: ${String.format("%.2f", face.smilingProbability)}",
                     x + ID_X_OFFSET * 3,
                     y - ID_Y_OFFSET,
                     idPaint)
@@ -69,25 +73,26 @@ class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace
 
         if (face.rightEyeOpenProbability >= 0) {
             canvas.drawText(
-                    "right eye: ${String.format("%.2f", face.rightEyeOpenProbability)}",
+                    "Right Eye: ${String.format("%.2f", face.rightEyeOpenProbability)}",
                     x - ID_X_OFFSET,
                     y,
                     idPaint)
         }
         if (face.leftEyeOpenProbability >= 0) {
             canvas.drawText(
-                    "left eye: ${String.format("%.2f", face.leftEyeOpenProbability)}",
+                    "Left Eye: ${String.format("%.2f", face.leftEyeOpenProbability)}",
                     x + ID_X_OFFSET * 6,
                     y,
                     idPaint)
         }
+
         val leftEye = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_EYE)
         leftEye?.position?.let {
             canvas.drawCircle(
                     translateX(it.x),
                     translateY(it.y),
                     FACE_POSITION_RADIUS,
-                    facePositionPaint)
+                    leftEyePaint)
         }
         val rightEye = face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EYE)
         rightEye?.position?.let {
@@ -95,7 +100,7 @@ class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace
                     translateX(it.x),
                     translateY(it.y),
                     FACE_POSITION_RADIUS,
-                    facePositionPaint)
+                    rightEyePaint)
         }
         val leftCheek = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_CHEEK)
         leftCheek?.position?.let {
@@ -114,12 +119,20 @@ class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace
                     FACE_POSITION_RADIUS,
                     facePositionPaint)
         }
+        val nose = face.getLandmark(FirebaseVisionFaceLandmark.NOSE_BASE)
+        nose?.position?.let {
+            canvas.drawCircle(
+                    translateX(it.x),
+                    translateY(it.y),
+                    FACE_POSITION_RADIUS,
+                    nosePaint)
+        }
     }
 
     companion object {
 
-        private const val FACE_POSITION_RADIUS = 4.0f
-        private const val ID_TEXT_SIZE = 30.0f
+        private const val FACE_POSITION_RADIUS = 5.0f
+        private const val ID_TEXT_SIZE = 40.0f
         private const val ID_Y_OFFSET = 80.0f
         private const val ID_X_OFFSET = -70.0f
         private const val BOX_STROKE_WIDTH = 5.0f

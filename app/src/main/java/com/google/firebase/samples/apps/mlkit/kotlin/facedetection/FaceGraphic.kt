@@ -25,12 +25,12 @@ class FaceGraphic(overlay: GraphicOverlay, private val firebaseVisionFace: Fireb
     }
 
     private val idPaint = Paint().apply {
-        color = Color.WHITE
+        color = Color.GREEN
         textSize = ID_TEXT_SIZE
     }
 
     private val boxPaint = Paint().apply {
-        color = Color.WHITE
+        color = Color.RED
         style = Style.STROKE
         strokeWidth = BOX_STROKE_WIDTH
     }
@@ -44,29 +44,29 @@ class FaceGraphic(overlay: GraphicOverlay, private val firebaseVisionFace: Fireb
         canvas.drawCircle(x, y, FACE_POSITION_RADIUS, facePositionPaint)
         canvas.drawText("id: " + face.trackingId, x + ID_X_OFFSET, y + ID_Y_OFFSET, idPaint)
         canvas.drawText(
-                "happiness: ${String.format("%.2f", face.smilingProbability)}",
+                "Smile Index: ${String.format("%.2f", face.smilingProbability)}",
                 x + ID_X_OFFSET * 3,
                 y - ID_Y_OFFSET,
                 idPaint)
         if (facing == CameraSource.CAMERA_FACING_FRONT) {
             canvas.drawText(
-                    "right eye: ${String.format("%.2f", face.rightEyeOpenProbability)}",
+                    "Right Eye: ${String.format("%.2f", face.rightEyeOpenProbability)}",
                     x - ID_X_OFFSET,
                     y,
                     idPaint)
             canvas.drawText(
-                    "left eye: ${String.format("%.2f", face.leftEyeOpenProbability)}",
+                    "Left Eye: ${String.format("%.2f", face.leftEyeOpenProbability)}",
                     x + ID_X_OFFSET * 6,
                     y,
                     idPaint)
         } else {
             canvas.drawText(
-                    "left eye: ${String.format("%.2f", face.leftEyeOpenProbability)}",
+                    "Left Eye: ${String.format("%.2f", face.leftEyeOpenProbability)}",
                     x - ID_X_OFFSET,
                     y,
                     idPaint)
             canvas.drawText(
-                    "right eye: ${String.format("%.2f", face.rightEyeOpenProbability)}",
+                    "Right Eye: ${String.format("%.2f", face.rightEyeOpenProbability)}",
                     x + ID_X_OFFSET * 6,
                     y,
                     idPaint)
@@ -107,7 +107,7 @@ class FaceGraphic(overlay: GraphicOverlay, private val firebaseVisionFace: Fireb
 
     companion object {
         private const val FACE_POSITION_RADIUS = 4.0f
-        private const val ID_TEXT_SIZE = 30.0f
+        private const val ID_TEXT_SIZE = 40.0f
         private const val ID_Y_OFFSET = 50.0f
         private const val ID_X_OFFSET = -50.0f
         private const val BOX_STROKE_WIDTH = 5.0f
