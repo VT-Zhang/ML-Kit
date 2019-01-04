@@ -26,11 +26,11 @@ class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace
         facePositionPaint.color = Color.WHITE
         faceContourPaint.color = Color.BLUE
         eyebrowPaint.color = Color.GREEN
-        eyePaint.color = Color.WHITE
+        eyePaint.color = Color.BLACK
         nosePaint.color = Color.MAGENTA
         lipsPaint.color = Color.RED
 
-        idPaint.color = Color.GREEN
+        idPaint.color = Color.WHITE
         idPaint.textSize = ID_TEXT_SIZE
 
         boxPaint.color = Color.RED
@@ -173,33 +173,33 @@ class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace
                     idPaint)
         }
 
-//        val leftEye = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_EYE)
-//        leftEye?.position?.let {
-//            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, leftEyePaint)
-//        }
-//        val rightEye = face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EYE)
-//        rightEye?.position?.let {
-//            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, rightEyePaint)
-//        }
-//        val leftCheek = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_CHEEK)
-//        leftCheek?.position?.let {
-//            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, facePositionPaint)
-//        }
-//
-//        val rightCheek = face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_CHEEK)
-//        rightCheek?.position?.let {
-//            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, facePositionPaint)
-//        }
-//        val nose = face.getLandmark(FirebaseVisionFaceLandmark.NOSE_BASE)
-//        nose?.position?.let {
-//            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, nosePaint)
-//        }
+        val leftEye = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_EYE)
+        leftEye?.position?.let {
+            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, eyePaint)
+        }
+        val rightEye = face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EYE)
+        rightEye?.position?.let {
+            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, eyePaint)
+        }
+        val leftCheek = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_CHEEK)
+        leftCheek?.position?.let {
+            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, facePositionPaint)
+        }
+
+        val rightCheek = face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_CHEEK)
+        rightCheek?.position?.let {
+            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, facePositionPaint)
+        }
+        val nose = face.getLandmark(FirebaseVisionFaceLandmark.NOSE_BASE)
+        nose?.position?.let {
+            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, nosePaint)
+        }
     }
 
     companion object {
 
         private const val FACE_POSITION_RADIUS = 5.0f
-        private const val ID_TEXT_SIZE = 40.0f
+        private const val ID_TEXT_SIZE = 30.0f
         private const val ID_Y_OFFSET = 80.0f
         private const val ID_X_OFFSET = -70.0f
         private const val BOX_STROKE_WIDTH = 5.0f

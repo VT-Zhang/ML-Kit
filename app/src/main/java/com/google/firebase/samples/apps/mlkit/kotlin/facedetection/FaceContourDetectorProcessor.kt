@@ -25,6 +25,8 @@ class FaceContourDetectorProcessor : VisionProcessorBase<List<FirebaseVisionFace
         val options = FirebaseVisionFaceDetectorOptions.Builder()
                 .setPerformanceMode(FirebaseVisionFaceDetectorOptions.FAST)
                 .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS)
+                .setClassificationMode((FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS))
+                .enableTracking()
                 .build()
 
         detector = FirebaseVision.getInstance().getVisionFaceDetector(options)
