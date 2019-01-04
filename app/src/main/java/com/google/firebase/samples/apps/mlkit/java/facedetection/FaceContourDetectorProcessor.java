@@ -34,6 +34,7 @@ public class FaceContourDetectorProcessor extends VisionProcessorBase<List<Fireb
                         .setPerformanceMode(FirebaseVisionFaceDetectorOptions.FAST)
                         .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS)
                         .setLandmarkMode(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+                        .setClassificationMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
                         .build();
 
         detector = FirebaseVision.getInstance().getVisionFaceDetector(options);
