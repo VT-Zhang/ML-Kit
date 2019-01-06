@@ -26,7 +26,7 @@ class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace
         facePositionPaint.color = Color.WHITE
         faceContourPaint.color = Color.BLUE
         eyebrowPaint.color = Color.GREEN
-        eyePaint.color = Color.BLACK
+        eyePaint.color = Color.WHITE
         nosePaint.color = Color.MAGENTA
         lipsPaint.color = Color.RED
 
