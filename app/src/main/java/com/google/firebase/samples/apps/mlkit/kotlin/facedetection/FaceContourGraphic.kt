@@ -3,6 +3,7 @@ package com.google.firebase.samples.apps.mlkit.kotlin.facedetection
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import com.google.firebase.ml.vision.face.FirebaseVisionFace
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceContour
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceLandmark
@@ -13,9 +14,9 @@ import com.google.firebase.samples.apps.mlkit.common.GraphicOverlay.Graphic
 class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace: FirebaseVisionFace?)
     : Graphic(overlay) {
 
-    private val facePositionPaint: Paint = Paint()
     private val idPaint: Paint = Paint()
     private val boxPaint: Paint = Paint()
+    private val facePositionPaint: Paint = Paint()
     private val faceContourPaint: Paint = Paint()
     private val eyebrowPaint: Paint = Paint()
     private val eyePaint: Paint = Paint()
@@ -23,12 +24,6 @@ class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace
     private val lipsPaint: Paint = Paint()
 
     init {
-        facePositionPaint.color = Color.WHITE
-        faceContourPaint.color = Color.BLUE
-        eyebrowPaint.color = Color.GREEN
-        eyePaint.color = Color.WHITE
-        nosePaint.color = Color.MAGENTA
-        lipsPaint.color = Color.RED
 
         idPaint.color = Color.WHITE
         idPaint.textSize = ID_TEXT_SIZE
@@ -36,6 +31,13 @@ class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace
         boxPaint.color = Color.RED
         boxPaint.style = Paint.Style.STROKE
         boxPaint.strokeWidth = BOX_STROKE_WIDTH
+
+        facePositionPaint.color = Color.WHITE
+        faceContourPaint.color = Color.BLUE
+        eyebrowPaint.color = Color.GREEN
+        eyePaint.color = Color.WHITE
+        nosePaint.color = Color.MAGENTA
+        lipsPaint.color = Color.RED
 
     }
 
