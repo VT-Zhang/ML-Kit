@@ -3,7 +3,6 @@ package com.google.firebase.samples.apps.mlkit.kotlin.facedetection
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.drawable.Drawable
 import com.google.firebase.ml.vision.face.FirebaseVisionFace
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceContour
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceLandmark
@@ -175,27 +174,27 @@ class FaceContourGraphic(overlay: GraphicOverlay, private val firebaseVisionFace
                     idPaint)
         }
 
-        val leftEye = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_EYE)
-        leftEye?.position?.let {
-            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, eyePaint)
-        }
-        val rightEye = face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EYE)
-        rightEye?.position?.let {
-            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, eyePaint)
-        }
-        val leftCheek = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_CHEEK)
-        leftCheek?.position?.let {
-            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, facePositionPaint)
-        }
-
-        val rightCheek = face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_CHEEK)
-        rightCheek?.position?.let {
-            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, facePositionPaint)
-        }
-        val nose = face.getLandmark(FirebaseVisionFaceLandmark.NOSE_BASE)
-        nose?.position?.let {
-            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, nosePaint)
-        }
+//        val leftEye = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_EYE)
+//        leftEye?.position?.let {
+//            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, eyePaint)
+//        }
+//        val rightEye = face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_EYE)
+//        rightEye?.position?.let {
+//            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, eyePaint)
+//        }
+//        val leftCheek = face.getLandmark(FirebaseVisionFaceLandmark.LEFT_CHEEK)
+//        leftCheek?.position?.let {
+//            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, facePositionPaint)
+//        }
+//
+//        val rightCheek = face.getLandmark(FirebaseVisionFaceLandmark.RIGHT_CHEEK)
+//        rightCheek?.position?.let {
+//            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, facePositionPaint)
+//        }
+//        val nose = face.getLandmark(FirebaseVisionFaceLandmark.NOSE_BASE)
+//        nose?.position?.let {
+//            canvas.drawCircle(translateX(it.x), translateY(it.y), FACE_POSITION_RADIUS, nosePaint)
+//        }
     }
 
     companion object {
