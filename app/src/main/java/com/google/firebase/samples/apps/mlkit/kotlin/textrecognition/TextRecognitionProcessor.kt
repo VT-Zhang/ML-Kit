@@ -11,7 +11,9 @@ import com.google.firebase.samples.apps.mlkit.common.CameraImageGraphic
 import com.google.firebase.samples.apps.mlkit.common.FrameMetadata
 import com.google.firebase.samples.apps.mlkit.common.GraphicOverlay
 import com.google.firebase.samples.apps.mlkit.kotlin.VisionProcessorBase
+import com.google.firebase.samples.apps.mlkit.kotlin.cloudtextrecognition.CloudDocumentTextRecognitionProcessor
 import java.io.IOException
+import java.lang.Double.parseDouble
 
 /** Processor for the text recognition demo.  */
 class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
@@ -30,17 +32,17 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
         return detector.processImage(image)
     }
 
-    override fun onSuccess(
-        originalCameraImage: Bitmap?,
-        results: FirebaseVisionText,
-        frameMetadata: FrameMetadata,
-        graphicOverlay: GraphicOverlay
-    ) {
+    override fun onSuccess(originalCameraImage: Bitmap?, results: FirebaseVisionText,
+        frameMetadata: FrameMetadata, graphicOverlay: GraphicOverlay) {
+
         graphicOverlay.clear()
+
         originalCameraImage.let { image ->
             val imageGraphic = CameraImageGraphic(graphicOverlay, image)
             graphicOverlay.add(imageGraphic)
         }
+
+        Log.d(TAG, "detected text is: ${results.text}")
         val blocks = results.textBlocks
         for (i in blocks.indices) {
             val lines = blocks[i].lines
@@ -53,6 +55,15 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
             }
         }
         graphicOverlay.postInvalidate()
+
+        val list : ArrayList<Double> = arrayListOf()
+        for (result in results.textBlocks) {
+            if (result.text.matches("\$\\d+(\\.\\d+)?".toRegex())) {
+                list.add(parseDouble(result.text))
+            }
+        }
+        val total = list.max()
+        Log.d(RES, "total price is: $total")
     }
 
     override fun onFailure(e: Exception) {
@@ -60,7 +71,7 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
     }
 
     companion object {
-
         private const val TAG = "TextRecProc"
+        private const val RES = "MaxTotalPrice"
     }
 }

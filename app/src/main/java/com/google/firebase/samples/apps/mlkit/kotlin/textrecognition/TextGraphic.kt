@@ -11,10 +11,8 @@ import com.google.firebase.samples.apps.mlkit.common.GraphicOverlay
  * Graphic instance for rendering TextBlock position, size, and ID within an associated graphic
  * overlay view.
  */
-class TextGraphic(
-    overlay: GraphicOverlay,
-    private val text: FirebaseVisionText.Element?
-) : GraphicOverlay.Graphic(overlay) {
+class TextGraphic(overlay: GraphicOverlay, private val text: FirebaseVisionText.Element?)
+    : GraphicOverlay.Graphic(overlay) {
 
     private val rectPaint = Paint().apply {
         color = TEXT_COLOR
@@ -44,8 +42,7 @@ class TextGraphic(
     }
 
     companion object {
-
-        private const val TEXT_COLOR = Color.WHITE
+        private const val TEXT_COLOR = Color.GREEN
         private const val TEXT_SIZE = 54.0f
         private const val STROKE_WIDTH = 4.0f
     }
