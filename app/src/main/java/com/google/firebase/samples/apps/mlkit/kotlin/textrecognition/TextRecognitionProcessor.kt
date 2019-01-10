@@ -58,13 +58,13 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
 
         val list : ArrayList<Double> = arrayListOf()
         for (result in results.textBlocks) {
-            if (result.text.matches("\$\\d+(\\.\\d+)?".toRegex())) {
-//                list.add(parseDouble(result.text))
-                Log.d(RES, "the dollar amount is: ${result.text}")
+            if (result.text.matches("\\d+(\\.\\d+)?".toRegex()) ||
+                    result.text.matches(("\\\$\\d+(?:\\.\\d+)?").toRegex())) {
+                list.add(parseDouble(result.text))
             }
         }
-//        val total = list.max()
-//        Log.d(RES, "total price is: $total")
+        val total = list.max()
+        Log.d(RES, "total price is: $total")
     }
 
     override fun onFailure(e: Exception) {
