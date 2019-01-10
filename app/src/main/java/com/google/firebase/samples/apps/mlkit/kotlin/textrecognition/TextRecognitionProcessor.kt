@@ -11,7 +11,6 @@ import com.google.firebase.samples.apps.mlkit.common.CameraImageGraphic
 import com.google.firebase.samples.apps.mlkit.common.FrameMetadata
 import com.google.firebase.samples.apps.mlkit.common.GraphicOverlay
 import com.google.firebase.samples.apps.mlkit.kotlin.VisionProcessorBase
-import com.google.firebase.samples.apps.mlkit.kotlin.cloudtextrecognition.CloudDocumentTextRecognitionProcessor
 import java.io.IOException
 import java.lang.Double.parseDouble
 
@@ -56,15 +55,44 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
         }
         graphicOverlay.postInvalidate()
 
-        val list : ArrayList<Double> = arrayListOf()
+        val total = extractTotal(results)
+        Log.d(TOTAL, "total price is: $total")
+    }
+
+    private fun extractTotal(results: FirebaseVisionText): Double? {
+        val list: ArrayList<Double> = arrayListOf()
         for (result in results.textBlocks) {
-            if (result.text.matches("\\d+(\\.\\d+)?".toRegex()) ||
-                    result.text.matches(("\\\$\\d+(?:\\.\\d+)?").toRegex())) {
+            // 先检测该字符串是否为纯数字字符串，假如是，加入集合中
+            if (result.text.matches("\\d+(\\.\\d+)?".toRegex())) {
                 list.add(parseDouble(result.text))
+            } else {
+                // 在检测该该字符串是否含有$符号，假如是，用normalizeDouble把$和多余char去掉
+                // 再把整理过之后的字符串加入集合
+                if (result.text.contains('$')) {
+                    list.add(normalizeDouble(result.text))
+                }
             }
         }
-        val total = list.max()
-        Log.d(RES, "total price is: $total")
+        // 设置加油站收据的合理最大值
+        val maxValue = 200.0
+        var max = 0.0
+        // 历遍集合找出小于合理最大值的最大值
+        for (number in list) {
+            if (number > max && number < maxValue) {
+                max = number
+            }
+        }
+        return max
+    }
+
+    private fun normalizeDouble(string: String): Double {
+        var res = ""
+        for (i in string.indices) {
+            if (string[i].isDigit() || string[i] == '.') {
+                res += string[i]
+            }
+        }
+        return parseDouble(res)
     }
 
     override fun onFailure(e: Exception) {
@@ -73,6 +101,6 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
 
     companion object {
         private const val TAG = "TextRecProc"
-        private const val RES = "MaxTotalPrice"
+        private const val TOTAL = "MaxTotalPrice"
     }
 }
