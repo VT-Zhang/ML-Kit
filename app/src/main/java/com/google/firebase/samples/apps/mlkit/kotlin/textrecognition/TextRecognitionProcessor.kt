@@ -12,12 +12,15 @@ import com.google.firebase.samples.apps.mlkit.common.FrameMetadata
 import com.google.firebase.samples.apps.mlkit.common.GraphicOverlay
 import com.google.firebase.samples.apps.mlkit.kotlin.VisionProcessorBase
 import java.io.IOException
-import java.lang.Double.parseDouble
+import java.lang.Float.parseFloat
 
 /** Processor for the text recognition demo.  */
 class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
 
     private val detector: FirebaseVisionTextRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
+    private val resList: ArrayList<String> = arrayListOf()
+    private val resMap = mutableMapOf<String, Int>()
+
 
     override fun stop() {
         try {
@@ -56,26 +59,64 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
         graphicOverlay.postInvalidate()
 
         val total = extractTotal(results)
-        Log.d(TOTAL, "total price is: $total")
+        val formattedTotal = "%.2f".format(total)
+        Log.d(TOTAL, formattedTotal)
+
+//        resList.add(formattedTotal)
+//        val possibleResult = getMostPossibleNumber(resList, resMap)
+//        val confidence = getConfidence(resMap, resList.size, possibleResult)
+//        Log.d(FRE, "The most possible total is $possibleResult and the confidence is $confidence")
     }
 
-    private fun extractTotal(results: FirebaseVisionText): Double? {
-        val list: ArrayList<Double> = arrayListOf()
-        for (result in results.textBlocks) {
-            // 先检测该字符串是否为纯数字字符串，假如是，加入集合中
-            if (result.text.matches("\\d+(\\.\\d+)?".toRegex())) {
-                list.add(parseDouble(result.text))
-            } else {
-                // 在检测该该字符串是否含有$符号，假如是，用normalizeDouble把$和多余char去掉
-                // 再把整理过之后的字符串加入集合
-                if (result.text.contains('$')) {
-                    list.add(normalizeDouble(result.text))
-                }
+    // 计算出现最多的结果在数组中的概率
+    private fun getConfidence(map: MutableMap<String, Int>, listSize: Int, string: String): Float {
+        for ((key, value) in map) {
+            if (key == string) {
+                return (value / listSize).toFloat()
             }
         }
+        return 0f
+    }
+
+    // 返回整个数组中重复出现最多的结果
+    private fun getMostPossibleNumber(list: ArrayList<String>, map: MutableMap<String, Int>): String {
+        for (item in list) {
+            if (map.containsKey(item)) {
+                map[item]?.plus(1)
+            } else {
+                map[item] = 1
+            }
+        }
+        val entry = map.maxBy { it.value }
+        val res = entry?.key.toString()
+        Log.d(MAX, "The map is $map")
+        Log.d(MAX, "The max number is: $res")
+        return res
+    }
+
+    private fun extractTotal(results: FirebaseVisionText): Float? {
+        val list: ArrayList<Float> = arrayListOf()
+        for (result in results.textBlocks) {
+
+            // 先检测该字符串是否为纯数字字符假如是，加入集合中
+            try {
+                list.add(parseFloat(result.text))
+            } catch (e: NumberFormatException) {
+                Log.d(ERR, "Number formatting error")
+            }
+
+            // 在检测该该字符串是否含有$符号，假如是，用normalizeFloat把$和多余char去掉
+            // 再把整理过之后的字符串加入集合
+            if (result.text.contains('$')) {
+                list.add(normalizeFloat(result.text))
+            }
+
+        }
+        Log.d(LIST, "The list is: $list" )
+
         // 设置加油站收据的合理最大值
-        val maxValue = 200.0
-        var max = 0.0
+        val maxValue = 100f
+        var max = 0f
         // 历遍集合找出小于合理最大值的最大值
         for (number in list) {
             if (number > max && number < maxValue) {
@@ -85,14 +126,19 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
         return max
     }
 
-    private fun normalizeDouble(string: String): Double {
+    private fun normalizeFloat(string: String): Float {
         var res = ""
         for (i in string.indices) {
             if (string[i].isDigit() || string[i] == '.') {
                 res += string[i]
             }
         }
-        return parseDouble(res)
+        try {
+            return parseFloat(res)
+        } catch (e: NumberFormatException) {
+            Log.d(ERR, "Number formatting error")
+        }
+        return 0f
     }
 
     override fun onFailure(e: Exception) {
@@ -102,5 +148,9 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
     companion object {
         private const val TAG = "TextRecProc"
         private const val TOTAL = "MaxTotalPrice"
+        private const val ERR = "NumberFormattingError"
+        private const val LIST = "List"
+        private const val FRE = "MostFrequent"
+        private const val MAX = "MaxNumber"
     }
 }
