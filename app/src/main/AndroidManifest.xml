@@ -11,22 +11,21 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_captialone"
         android:label="@string/app_name"
         android:theme="@style/MaterialTheme">
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode,face,ocr,ica" />
 
-        <activity
-            android:name="com.google.firebase.samples.apps.mlkit.java.ChooserActivity"/>
+        <!--<activity-->
+            <!--android:name="com.google.firebase.samples.apps.mlkit.java.LivePreviewActivity"/>-->
+
+        <!--<activity-->
+            <!--android:name="com.google.firebase.samples.apps.mlkit.kotlin.LivePreviewActivity"/>-->
 
         <activity
-            android:name="com.google.firebase.samples.apps.mlkit.kotlin.ChooserActivity"/>
-
-
-        <activity
-            android:name="com.google.firebase.samples.apps.mlkit.EntryChoiceActivity"
+            android:name="com.google.firebase.samples.apps.mlkit.kotlin.LivePreviewActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
@@ -36,10 +35,10 @@
         </activity>
 
 
-        <activity android:name=".java.LivePreviewActivity" android:exported="true">
-        </activity>
+        <!--<activity android:name=".java.LivePreviewActivity" android:exported="true">-->
+        <!--</activity>-->
 
-        <activity android:name=".kotlin.LivePreviewActivity" android:exported="true"/>
+        <!--<activity android:name=".kotlin.LivePreviewActivity" android:exported="true"/>-->
 
 
         <activity android:name=".java.StillImageActivity"
