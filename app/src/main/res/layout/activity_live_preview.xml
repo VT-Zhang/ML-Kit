@@ -33,6 +33,15 @@
       android:textSize="20sp"
       android:textStyle="bold" />
 
+    <ImageView
+        android:layout_width="245dp"
+        android:layout_height="174dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="47dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_captialone" />
+
   <FrameLayout
       android:id="@+id/control"
       android:layout_width="match_parent"
