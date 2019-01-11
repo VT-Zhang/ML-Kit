@@ -50,7 +50,7 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
         OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
 
     private var cameraSource: CameraSource? = null
-    private var selectedModel = FACE_CONTOUR
+    private var selectedModel = TEXT_DETECTION
 
     private val requiredPermissions: Array<String?>
         get() {
@@ -82,13 +82,14 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
             Log.d(TAG, "graphicOverlay is null")
         }
 
-        val options = arrayListOf(FACE_CONTOUR,
-                FACE_DETECTION,
+        val options = arrayListOf(
                 TEXT_DETECTION,
-                BARCODE_DETECTION,
-                IMAGE_LABEL_DETECTION,
-                CLASSIFICATION_QUANT,
-                CLASSIFICATION_FLOAT)
+                FACE_CONTOUR,
+                IMAGE_LABEL_DETECTION
+//                BARCODE_DETECTION,
+//                CLASSIFICATION_QUANT,
+//                CLASSIFICATION_FLOAT
+        )
         // Creating adapter for spinner
         val dataAdapter = ArrayAdapter(this, R.layout.spinner_style, options)
         // Drop down layout style - list view with radio button
@@ -152,34 +153,36 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
 
         try {
             when (model) {
-                CLASSIFICATION_QUANT -> {
-                    Log.i(TAG, "Using Custom Image Classifier (quant) Processor")
-                    cameraSource?.setMachineLearningFrameProcessor(CustomImageClassifierProcessor(this, true))
-                }
-                CLASSIFICATION_FLOAT -> {
-                    Log.i(TAG, "Using Custom Image Classifier (float) Processor")
-                    cameraSource?.setMachineLearningFrameProcessor(CustomImageClassifierProcessor(this, false))
-                }
+
                 TEXT_DETECTION -> {
                     Log.i(TAG, "Using Text Detector Processor")
                     cameraSource?.setMachineLearningFrameProcessor(TextRecognitionProcessor())
-                }
-                FACE_DETECTION -> {
-                    Log.i(TAG, "Using Face Detector Processor")
-                    cameraSource?.setMachineLearningFrameProcessor(FaceDetectionProcessor())
-                }
-                BARCODE_DETECTION -> {
-                    Log.i(TAG, "Using Barcode Detector Processor")
-                    cameraSource?.setMachineLearningFrameProcessor(BarcodeScanningProcessor())
-                }
-                IMAGE_LABEL_DETECTION -> {
-                    Log.i(TAG, "Using Image Label Detector Processor")
-                    cameraSource?.setMachineLearningFrameProcessor(ImageLabelingProcessor())
                 }
                 FACE_CONTOUR -> {
                     Log.i(TAG, "Using Face Contour Detector Processor")
                     cameraSource?.setMachineLearningFrameProcessor(FaceContourDetectorProcessor())
                 }
+                IMAGE_LABEL_DETECTION -> {
+                    Log.i(TAG, "Using Image Label Detector Processor")
+                    cameraSource?.setMachineLearningFrameProcessor(ImageLabelingProcessor())
+                }
+//                CLASSIFICATION_QUANT -> {
+//                    Log.i(TAG, "Using Custom Image Classifier (quant) Processor")
+//                    cameraSource?.setMachineLearningFrameProcessor(CustomImageClassifierProcessor(this, true))
+//                }
+//                CLASSIFICATION_FLOAT -> {
+//                    Log.i(TAG, "Using Custom Image Classifier (float) Processor")
+//                    cameraSource?.setMachineLearningFrameProcessor(CustomImageClassifierProcessor(this, false))
+//                }
+//                FACE_DETECTION -> {
+//                    Log.i(TAG, "Using Face Detector Processor")
+//                    cameraSource?.setMachineLearningFrameProcessor(FaceDetectionProcessor())
+//                }
+//                BARCODE_DETECTION -> {
+//                    Log.i(TAG, "Using Barcode Detector Processor")
+//                    cameraSource?.setMachineLearningFrameProcessor(BarcodeScanningProcessor())
+//                }
+
                 else -> Log.e(TAG, "Unknown model: $model")
             }
         } catch (e: FirebaseMLException) {
