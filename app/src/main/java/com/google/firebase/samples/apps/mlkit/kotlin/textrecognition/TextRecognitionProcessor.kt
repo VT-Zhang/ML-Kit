@@ -114,12 +114,12 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
         }
         Log.d(LIST, "The list is: $list" )
 
-        // 设置加油站收据的合理最大值
-        val maxValue = 100f
+        // 设置加油站/餐饮收据的合理最大值
+        val reasonable = 100f
         var max = 0f
-        // 历遍集合找出小于合理最大值的最大值
+        // 历遍集合找出小于合理值的最大值
         for (number in list) {
-            if (number > max && number < maxValue) {
+            if (number > max && number < reasonable) {
                 max = number
             }
         }

@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1083806412002:android:4117b88fd53b695b",
         "android_client_info": {
-          "package_name": "com.capitalone.facedetection"
+          "package_name": "com.capitalone.receiptrecognition"
         }
       },
       "oauth_client": [
