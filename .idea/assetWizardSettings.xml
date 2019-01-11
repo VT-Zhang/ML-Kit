@@ -19,8 +19,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$PROJECT_DIR$/../../640px-Capital_One_logo.svg.png" />
+                                      <entry key="imageAsset" value="$PROJECT_DIR$/../../2000px-Capital_One_logo.svg.png" />
                                       <entry key="outputName" value="ic_captialone" />
+                                      <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="0044e5" />
                                     </map>
                                   </option>
                                 </PersistentState>

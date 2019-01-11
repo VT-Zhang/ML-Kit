@@ -40,6 +40,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="47dp"
         android:scaleType="fitXY"
+        android:adjustViewBounds="true"
         android:src="@drawable/ic_captialone" />
 
   <FrameLayout
