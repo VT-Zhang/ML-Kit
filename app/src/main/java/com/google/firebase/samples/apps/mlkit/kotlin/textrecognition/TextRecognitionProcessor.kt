@@ -20,7 +20,14 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
     private val detector: FirebaseVisionTextRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
     private val resList: ArrayList<String> = arrayListOf()
     private val resMap = mutableMapOf<String, Int>()
-    var formattedTotal: String = "没变"
+//    var formattedTotal: String = "没变"
+    private var formattedTotal: String = ""
+    private var formattedDate: String = ""
+    private val dateRegex = "^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))\$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\$"
+
+    fun getFormattedTotal(): String {
+        return formattedTotal
+    }
 
     override fun stop() {
         try {
@@ -36,7 +43,6 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
 
     override fun onSuccess(originalCameraImage: Bitmap?, results: FirebaseVisionText,
         frameMetadata: FrameMetadata, graphicOverlay: GraphicOverlay) {
-
         graphicOverlay.clear()
 
         originalCameraImage.let { image ->
@@ -53,7 +59,6 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
             for (j in lines.indices) {
                 val elements = lines[j].elements
                 Log.d(TAG, "detected elements is: $elements")
-
                 for (k in elements.indices) {
                     val textGraphic = TextGraphic(graphicOverlay, elements[k])
                     graphicOverlay.add(textGraphic)
@@ -64,6 +69,9 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
         val total = extractTotal(results)
         formattedTotal = "%.2f".format(total)
         Log.d(TOTAL, formattedTotal)
+        formattedDate = extractDate(results)
+        Log.d(TOTAL, "The date is $formattedDate")
+
 
 //        val textGraphic = TextGraphic(graphicOverlay, )
         graphicOverlay.postInvalidate()
@@ -73,6 +81,16 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
 //        val possibleResult = getMostPossibleNumber(resList, resMap)
 //        val confidence = getConfidence(resMap, resList.size, possibleResult)
 //        Log.d(FRE, "The most possible total is $possibleResult and the confidence is $confidence")
+    }
+
+    private fun extractDate(results: FirebaseVisionText): String {
+        for (result in results.textBlocks) {
+//            if (result.text.matches("^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\\d\\d\$".toRegex())) {
+            if (result.text.matches("[0-9]{2}[- /.][0-9]{2}[- /.][0-9]{4}".toRegex())) {
+                return result.text
+            }
+        }
+        return ""
     }
 
     private fun extractTotal(results: FirebaseVisionText): Float? {

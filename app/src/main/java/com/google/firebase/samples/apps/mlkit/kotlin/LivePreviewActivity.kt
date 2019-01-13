@@ -157,7 +157,7 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
                 TEXT_DETECTION -> {
                     Log.i(TAG, "Using Text Detector Processor")
                     cameraSource?.setMachineLearningFrameProcessor(TextRecognitionProcessor())
-                    total = TextRecognitionProcessor().formattedTotal
+                    total = TextRecognitionProcessor().getFormattedTotal()
                     totalText.text = "The total is: $total"
                 }
                 FACE_CONTOUR -> {
