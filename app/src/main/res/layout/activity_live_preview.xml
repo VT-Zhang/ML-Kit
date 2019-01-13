@@ -25,23 +25,27 @@
           android:layout_alignParentBottom="true"/>
   </com.google.firebase.samples.apps.mlkit.common.CameraSourcePreview>
 
-  <TextView android:id="@+id/text"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:paddingLeft="80dp"
-      android:textColor="#FFF"
-      android:textSize="20sp"
-      android:textStyle="bold" />
-
     <ImageView
+        android:id="@+id/logo"
         android:layout_width="227dp"
         android:layout_height="78dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="88dp"
+        android:layout_marginBottom="110dp"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         android:src="@drawable/c1_logo" />
+
+    <TextView
+        android:id="@+id/totalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/logo"
+        android:layout_below="@+id/logo"
+        android:layout_marginTop="-110dp"
+        android:paddingLeft="30dp"
+        android:textColor="#FFF"
+        android:textSize="20sp" />
 
   <FrameLayout
       android:id="@+id/control"

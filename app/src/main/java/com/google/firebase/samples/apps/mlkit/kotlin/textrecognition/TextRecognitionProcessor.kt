@@ -20,7 +20,7 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
     private val detector: FirebaseVisionTextRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
     private val resList: ArrayList<String> = arrayListOf()
     private val resMap = mutableMapOf<String, Int>()
-
+    var formattedTotal: String = "没变"
 
     override fun stop() {
         try {
@@ -45,53 +45,34 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
         }
 
         Log.d(TAG, "detected text is: ${results.text}")
+
         val blocks = results.textBlocks
         for (i in blocks.indices) {
             val lines = blocks[i].lines
+            Log.d(TAG, "detected line is: $lines")
             for (j in lines.indices) {
                 val elements = lines[j].elements
+                Log.d(TAG, "detected elements is: $elements")
+
                 for (k in elements.indices) {
                     val textGraphic = TextGraphic(graphicOverlay, elements[k])
                     graphicOverlay.add(textGraphic)
                 }
             }
         }
-        graphicOverlay.postInvalidate()
 
         val total = extractTotal(results)
-        val formattedTotal = "%.2f".format(total)
+        formattedTotal = "%.2f".format(total)
         Log.d(TOTAL, formattedTotal)
+
+//        val textGraphic = TextGraphic(graphicOverlay, )
+        graphicOverlay.postInvalidate()
+
 
 //        resList.add(formattedTotal)
 //        val possibleResult = getMostPossibleNumber(resList, resMap)
 //        val confidence = getConfidence(resMap, resList.size, possibleResult)
 //        Log.d(FRE, "The most possible total is $possibleResult and the confidence is $confidence")
-    }
-
-    // 计算出现最多的结果在数组中的概率
-    private fun getConfidence(map: MutableMap<String, Int>, listSize: Int, string: String): Float {
-        for ((key, value) in map) {
-            if (key == string) {
-                return (value / listSize).toFloat()
-            }
-        }
-        return 0f
-    }
-
-    // 返回整个数组中重复出现最多的结果
-    private fun getMostPossibleNumber(list: ArrayList<String>, map: MutableMap<String, Int>): String {
-        for (item in list) {
-            if (map.containsKey(item)) {
-                map[item]?.plus(1)
-            } else {
-                map[item] = 1
-            }
-        }
-        val entry = map.maxBy { it.value }
-        val res = entry?.key.toString()
-        Log.d(MAX, "The map is $map")
-        Log.d(MAX, "The max number is: $res")
-        return res
     }
 
     private fun extractTotal(results: FirebaseVisionText): Float? {
@@ -139,6 +120,32 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
             Log.d(ERR, "Number formatting error")
         }
         return 0f
+    }
+
+    // 计算出现最多的结果在数组中的概率
+    private fun getConfidence(map: MutableMap<String, Int>, listSize: Int, string: String): Float {
+        for ((key, value) in map) {
+            if (key == string) {
+                return (value / listSize).toFloat()
+            }
+        }
+        return 0f
+    }
+
+    // 返回整个数组中重复出现最多的结果
+    private fun getMostPossibleNumber(list: ArrayList<String>, map: MutableMap<String, Int>): String {
+        for (item in list) {
+            if (map.containsKey(item)) {
+                map[item]?.plus(1)
+            } else {
+                map[item] = 1
+            }
+        }
+        val entry = map.maxBy { it.value }
+        val res = entry?.key.toString()
+        Log.d(MAX, "The map is $map")
+        Log.d(MAX, "The max number is: $res")
+        return res
     }
 
     override fun onFailure(e: Exception) {

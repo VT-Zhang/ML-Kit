@@ -37,10 +37,7 @@ import com.google.firebase.samples.apps.mlkit.kotlin.facedetection.FaceContourDe
 import com.google.firebase.samples.apps.mlkit.kotlin.facedetection.FaceDetectionProcessor
 import com.google.firebase.samples.apps.mlkit.kotlin.imagelabeling.ImageLabelingProcessor
 import com.google.firebase.samples.apps.mlkit.kotlin.textrecognition.TextRecognitionProcessor
-import kotlinx.android.synthetic.main.activity_live_preview.facingSwitch
-import kotlinx.android.synthetic.main.activity_live_preview.fireFaceOverlay
-import kotlinx.android.synthetic.main.activity_live_preview.firePreview
-import kotlinx.android.synthetic.main.activity_live_preview.spinner
+import kotlinx.android.synthetic.main.activity_live_preview.*
 import java.io.IOException
 
 /** Demo app showing the various features of ML Kit for Firebase. This class is used to
@@ -51,6 +48,7 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
 
     private var cameraSource: CameraSource? = null
     private var selectedModel = TEXT_DETECTION
+    private var total: String = ""
 
     private val requiredPermissions: Array<String?>
         get() {
@@ -73,6 +71,8 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
         Log.d(TAG, "onCreate")
 
         setContentView(R.layout.activity_live_preview)
+
+//        totalText.text = "The total is: $total"
 
         if (firePreview == null) {
             Log.d(TAG, "Preview is null")
@@ -157,6 +157,8 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
                 TEXT_DETECTION -> {
                     Log.i(TAG, "Using Text Detector Processor")
                     cameraSource?.setMachineLearningFrameProcessor(TextRecognitionProcessor())
+                    total = TextRecognitionProcessor().formattedTotal
+                    totalText.text = "The total is: $total"
                 }
                 FACE_CONTOUR -> {
                     Log.i(TAG, "Using Face Contour Detector Processor")
