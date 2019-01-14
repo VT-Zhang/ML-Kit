@@ -48,6 +48,7 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
 
         Log.d(TAG, "detected text is: ${results.text}")
 
+        // 把所有block都加入到graphicOverlay里去，显示为绿色的框
         val blocks = results.textBlocks
         for (i in blocks.indices) {
             val lines = blocks[i].lines
@@ -59,11 +60,11 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
                 }
             }
         }
-
-
+        
         totalAmount = extractTotal(results)
         Log.d(TOTAL, totalAmount)
 
+        // 已有最大金额，再次历遍results，找到相同的字符串，把那个元素用红框框起来
         for (i in blocks.indices) {
             val lines = blocks[i].lines
             for (j in lines.indices) {
