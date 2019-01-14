@@ -58,24 +58,37 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
         val blocks = results.textBlocks
         for (i in blocks.indices) {
             val lines = blocks[i].lines
-            Log.d(TAG, "detected line is: $lines")
             for (j in lines.indices) {
                 val elements = lines[j].elements
-                Log.d(TAG, "detected elements is: $elements")
                 for (k in elements.indices) {
-                    val textGraphic = TextGraphic(graphicOverlay, elements[k])
+                    val textGraphic = TextGraphic(graphicOverlay, elements[k], false)
                     graphicOverlay.add(textGraphic)
                 }
             }
         }
 
-        setTotal(extractTotal(results))
-//        total = extractTotal(results)
+
+        total = extractTotal(results)
         Log.d(TOTAL, total)
-        date = extractDate(results)
-        Log.d(TOTAL, "The date is $date")
+
+        for (i in blocks.indices) {
+            val lines = blocks[i].lines
+            for (j in lines.indices) {
+                val elements = lines[j].elements
+                for (k in elements.indices) {
+                    if (elements[k].text == total) {
+                        val targetTextGraphic = TextGraphic(graphicOverlay, elements[k], true)
+                        graphicOverlay.add(targetTextGraphic)
+                    }
+                }
+            }
+        }
 
         graphicOverlay.postInvalidate()
+
+//        date = extractDate(results)
+//        Log.d(TOTAL, "The date is $date")
+
 
 //        resList.add(formattedTotal)
 //        val possibleResult = getMostPossibleNumber(resList, resMap)
@@ -94,6 +107,7 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
     }
 
     private fun extractTotal(results: FirebaseVisionText): String {
+        var isDollar: Boolean = false
         val list: ArrayList<Float> = arrayListOf()
         for (result in results.textBlocks) {
             // 先检测该字符串是否为纯数字字符假如是，加入集合中
@@ -106,6 +120,7 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
             // 在检测该该字符串是否含有$符号，假如是，用normalizeFloat把$和多余char去掉
             // 再把整理过之后的字符串加入集合
             if (result.text.contains('$')) {
+                isDollar = true
                 list.add(normalizeFloat(result.text))
             }
         }
@@ -118,6 +133,9 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
             if (number > max && number < reasonable) {
                 max = number
             }
+        }
+        if (isDollar) {
+            return "$" + "%.2f".format(max)
         }
         return "%.2f".format(max)
     }
@@ -172,7 +190,6 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
         private const val TOTAL = "MaxTotalPrice"
         private const val ERR = "NumberFormattingError"
         private const val LIST = "List"
-        private const val FRE = "MostFrequent"
         private const val MAX = "MaxNumber"
     }
 }
