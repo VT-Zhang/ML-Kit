@@ -267,7 +267,7 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
 
     companion object {
         private const val FACE_DETECTION = "Face Detection"
-        private const val TEXT_DETECTION = "Text Detection"
+        private const val TEXT_DETECTION = "Receipt Total Detection"
         private const val BARCODE_DETECTION = "Barcode Detection"
         private const val IMAGE_LABEL_DETECTION = "Label Detection"
         private const val CLASSIFICATION_QUANT = "Classification (quantized)"
