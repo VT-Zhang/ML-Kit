@@ -111,14 +111,6 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
             getRuntimePermissions()
         }
 
-        val button = button
-        button.setOnClickListener { setTotalAmount() }
-    }
-
-    private fun setTotalAmount() {
-        total = TextRecognitionProcessor().getTotal()
-        Log.d("ParseTotal", "The parsed total is: $total")
-        totalText?.text = "The total is: $total"
     }
 
     @Synchronized

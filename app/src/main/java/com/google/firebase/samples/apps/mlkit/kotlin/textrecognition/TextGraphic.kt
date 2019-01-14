@@ -14,6 +14,8 @@ import com.google.firebase.samples.apps.mlkit.common.GraphicOverlay
 class TextGraphic(overlay: GraphicOverlay, private val text: FirebaseVisionText.Element?, isTarget: Boolean)
     : GraphicOverlay.Graphic(overlay) {
 
+    private val isTarget = isTarget
+
     private val rectPaint = Paint().apply {
         color = TEXT_COLOR
         style = Paint.Style.STROKE
@@ -35,8 +37,6 @@ class TextGraphic(overlay: GraphicOverlay, private val text: FirebaseVisionText.
         color = TARGET_TEXT_COLOR
         textSize = TARGET_TEXT_SIZE
     }
-
-    private val isTarget = isTarget
 
     /** Draws the text block annotations for position, size, and raw value on the supplied canvas.  */
     override fun draw(canvas: Canvas) {

@@ -31,30 +31,10 @@
         android:layout_height="78dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="110dp"
+        android:layout_marginBottom="79dp"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         android:src="@drawable/c1_logo" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/totalText"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="69dp"
-        android:text="Get Total" />
-
-    <TextView
-        android:id="@+id/totalText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/logo"
-        android:layout_below="@+id/logo"
-        android:layout_marginTop="-110dp"
-        android:layout_marginStart="100dp"
-        android:textColor="#FFF"
-        android:textSize="20sp" />
 
   <FrameLayout
       android:id="@+id/control"

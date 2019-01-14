@@ -20,17 +20,9 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
     private val detector: FirebaseVisionTextRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
     private val resList: ArrayList<String> = arrayListOf()
     private val resMap = mutableMapOf<String, Int>()
-    private var total: String = "Never Changed"
+    private var totalAmount: String = ""
     private var date: String = ""
     private val dateRegex = "^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))\$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\$"
-
-    fun getTotal(): String {
-        return this.total
-    }
-
-    private fun setTotal(value: String) {
-        this.total = value
-    }
 
     override fun stop() {
         try {
@@ -68,15 +60,15 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
         }
 
 
-        total = extractTotal(results)
-        Log.d(TOTAL, total)
+        totalAmount = extractTotal(results)
+        Log.d(TOTAL, totalAmount)
 
         for (i in blocks.indices) {
             val lines = blocks[i].lines
             for (j in lines.indices) {
                 val elements = lines[j].elements
                 for (k in elements.indices) {
-                    if (elements[k].text == total) {
+                    if (elements[k].text == totalAmount) {
                         val targetTextGraphic = TextGraphic(graphicOverlay, elements[k], true)
                         graphicOverlay.add(targetTextGraphic)
                     }
@@ -89,11 +81,6 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
 //        date = extractDate(results)
 //        Log.d(TOTAL, "The date is $date")
 
-
-//        resList.add(formattedTotal)
-//        val possibleResult = getMostPossibleNumber(resList, resMap)
-//        val confidence = getConfidence(resMap, resList.size, possibleResult)
-//        Log.d(FRE, "The most possible total is $possibleResult and the confidence is $confidence")
     }
 
     private fun extractDate(results: FirebaseVisionText): String {
