@@ -20,13 +20,16 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
     private val detector: FirebaseVisionTextRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
     private val resList: ArrayList<String> = arrayListOf()
     private val resMap = mutableMapOf<String, Int>()
-//    var formattedTotal: String = "没变"
-    private var formattedTotal: String = ""
-    private var formattedDate: String = ""
+    private var total: String = "Never Changed"
+    private var date: String = ""
     private val dateRegex = "^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))\$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\$"
 
-    fun getFormattedTotal(): String {
-        return formattedTotal
+    fun getTotal(): String {
+        return this.total
+    }
+
+    private fun setTotal(value: String) {
+        this.total = value
     }
 
     override fun stop() {
@@ -66,16 +69,13 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
             }
         }
 
-        val total = extractTotal(results)
-        formattedTotal = "%.2f".format(total)
-        Log.d(TOTAL, formattedTotal)
-        formattedDate = extractDate(results)
-        Log.d(TOTAL, "The date is $formattedDate")
+        setTotal(extractTotal(results))
+//        total = extractTotal(results)
+        Log.d(TOTAL, total)
+        date = extractDate(results)
+        Log.d(TOTAL, "The date is $date")
 
-
-//        val textGraphic = TextGraphic(graphicOverlay, )
         graphicOverlay.postInvalidate()
-
 
 //        resList.add(formattedTotal)
 //        val possibleResult = getMostPossibleNumber(resList, resMap)
@@ -93,10 +93,9 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
         return ""
     }
 
-    private fun extractTotal(results: FirebaseVisionText): Float? {
+    private fun extractTotal(results: FirebaseVisionText): String {
         val list: ArrayList<Float> = arrayListOf()
         for (result in results.textBlocks) {
-
             // 先检测该字符串是否为纯数字字符假如是，加入集合中
             try {
                 list.add(parseFloat(result.text))
@@ -109,10 +108,8 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
             if (result.text.contains('$')) {
                 list.add(normalizeFloat(result.text))
             }
-
         }
         Log.d(LIST, "The list is: $list" )
-
         // 设置加油站/餐饮收据的合理最大值
         val reasonable = 100f
         var max = 0f
@@ -122,7 +119,7 @@ class TextRecognitionProcessor : VisionProcessorBase<FirebaseVisionText>() {
                 max = number
             }
         }
-        return max
+        return "%.2f".format(max)
     }
 
     private fun normalizeFloat(string: String): Float {

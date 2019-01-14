@@ -110,6 +110,15 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
         } else {
             getRuntimePermissions()
         }
+
+        val button = button
+        button.setOnClickListener { setTotalAmount() }
+    }
+
+    private fun setTotalAmount() {
+        total = TextRecognitionProcessor().getTotal()
+        Log.d("ParseTotal", "The parsed total is: $total")
+        totalText?.text = "The total is: $total"
     }
 
     @Synchronized
@@ -153,12 +162,9 @@ class LivePreviewActivity : AppCompatActivity(), OnRequestPermissionsResultCallb
 
         try {
             when (model) {
-
                 TEXT_DETECTION -> {
                     Log.i(TAG, "Using Text Detector Processor")
                     cameraSource?.setMachineLearningFrameProcessor(TextRecognitionProcessor())
-                    total = TextRecognitionProcessor().getFormattedTotal()
-                    totalText.text = "The total is: $total"
                 }
                 FACE_CONTOUR -> {
                     Log.i(TAG, "Using Face Contour Detector Processor")
